@@ -146,7 +146,7 @@ if (isset($_POST["maintenance"])){
 		output("Your maintenance issue has been submitted.");
 
 	}
-	
+
 }
 
 
@@ -176,7 +176,7 @@ if ($appinfo["status"] == "approved"){
 					$ocArray = explode(",", $occupants); // Occupant ID array
 					if (in_array($student["id"], $ocArray)){
 						$assignedRoom = $r;
-						for ($i = 0; $i < sizeof($ocArray); $i++) { 
+						for ($i = 0; $i < sizeof($ocArray); $i++) {
 							$st = query($CONNECTION, "students", "id", $ocArray[$i])[0];
 							$roomOccupants .= $st["firstName"] . " " . $st["lastName"];
 							if ($i < sizeof($ocArray) - 1) $roomOccupants .= ", ";
@@ -269,16 +269,25 @@ foreach ($rooms as $r) {
 $roomList .= "</tbody></table>";
 
 // Schedule calendar builder
-$dateComponents = getdate();
+$dateComponents = getdate(date("U", strtotime($CALENDAR)));
 $month = $dateComponents['mon'];
 $year = $dateComponents['year'];
 $selectable = true; // provides radio buttons in the calendar
 $pastSelections = false; // disables selections before the current date
-$dateList = buildCalendar($month, $year, $selectable, $pastSelections);
+$controls = true; // enable calendar controls
+$dateList = buildCalendar($month, $year, $selectable, $controls, $pastSelections);
 
 // Schedule time slot builder
 $dateSelected;
 $timeList;
+
+// check for data backup
+if (isset($_SESSION["backup"])){
+	if (isset($_SESSION["backup"]["checkin"]) || isset($_SESSION["backup"]["checkout"])){
+		$_POST = $_SESSION["backup"];
+	}
+}
+
 if (isset($_POST["checkin"]) || isset($_POST["checkout"])){
 	$custodians = query($CONNECTION, "custodians"); // Fetches custodian list
 	$custodians = sizeof($custodians); // Gets number of custodians
@@ -312,6 +321,24 @@ if (isset($_POST["checkin"]) || isset($_POST["checkout"])){
 		$timeList .= "</tr>";
 	}
 	$timeList .= "</tbody><table>";
+
+	// Redirect to necessary page
+	if (!isset($_SESSION["backup"])){
+		$_SESSION["backup"] = $_POST; // back up data and redirect
+		if ($_POST["checkin"]){
+			header("location: checkintime");
+			exit();
+		} elseif ($_POST["checkout"]) {
+			header("location: checkouttime");
+			exit();
+		}
+	} else {
+		// Clear backup
+		unset($_SESSION["backup"]);
+		// Clear calendar
+		unset($_SESSION["calendar"]);
+	}
+
 }
 
 ?>

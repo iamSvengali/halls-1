@@ -10,4 +10,5 @@
 	a { display: inline-block; margin-right: 2rem; text-transform: capitalize; }
 	textarea { resize: none;  }
 	button[disabled] { opacity: .5; pointer-events: none; user-select: none; }
+	caption button { border: 0; }
 </style>

@@ -181,8 +181,17 @@ function disconnect($connection){
 
 }
 
+// Handles calendar post events
+if (!isset($_SESSION["calendar"])) $_SESSION["calendar"] = 0;
+if (isset($_POST["CALENDAR"])){
+	$_SESSION["calendar"] += $_POST["CALENDAR"];
+}
+$pre = "";
+if ($_SESSION["calendar"] > 0) $pre = "+";
+$CALENDAR = $pre . $_SESSION["calendar"] . " months";
+
 // Creates a calendar table
-function buildCalendar($month, $year, $input = false, $past = false, $format = "Y-m-d") {
+function buildCalendar($month, $year, $input = false, $controls = false, $past = false, $format = "Y-m-d") {
 	// Create array containing abbreviations of days of week.
 	$daysOfWeek = array('S','M','T','W','T','F','S');
 
@@ -205,7 +214,11 @@ function buildCalendar($month, $year, $input = false, $past = false, $format = "
 
 	// Create the table tag opener and day headers
 	$calendar = "<table>";
-	$calendar .= "<caption>$monthName $year</caption>";
+	$calendar .= "<caption>";
+	$calendar .= $controls ? "<button type='submit' name='CALENDAR' value='-1'>&lt;</button>" : "";
+	$calendar .= $monthName . " " . $year;
+	$calendar .= $controls ? "<button type='submit' name='CALENDAR' value='+1'>&gt;</button>" : "";
+	$calendar .= "</caption>";
 	$calendar .= "<tr>";
 
 	// Create the calendar headers
@@ -236,8 +249,8 @@ function buildCalendar($month, $year, $input = false, $past = false, $format = "
 	  $date = "$year-$month-$currentDayRel";
 	  $calendar .= "<td>";
 		$calendar .= $currentDay;
-		$disabled = (time()-(60*60*24)) > strtotime($date) ? 'disabled' : '';
-		if ($input) $calendar .= "<br><input type='radio' required ".$disabled." name='date' value='".$date."'";
+		if (!$past) $disabled = (time()-(60*60*24)) > strtotime($date) ? 'disabled' : '';
+		if ($input) $calendar .= "<br><input type='radio' ".$disabled." name='date' value='".$date."'>";
 		$calendar .= "</td>";
 	  // Increment counters
 	  $currentDay++;

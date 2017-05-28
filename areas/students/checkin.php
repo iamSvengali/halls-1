@@ -18,7 +18,7 @@
 
 		<p>Please select a date in the calendar below and click Next</p>
 
-		<form action="checkintime" method="post">
+		<form action="" method="post">
 			<?=$student["checkedIn"] ? "<p><b>You're already checked in.</b></p>" : $dateList?>
 			<?php if (!$student["checkedIn"]) {?>
 				<button type="submit" name="checkin" value="selected">Next</button>
