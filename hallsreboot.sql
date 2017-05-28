@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2017 at 02:14 AM
+-- Generation Time: May 28, 2017 at 09:47 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -32,7 +32,7 @@ CREATE TABLE `applications` (
   `room` int(11) NOT NULL,
   `status` enum('pending','processing','approved','denied') NOT NULL DEFAULT 'pending',
   `lastModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `note` text NOT NULL
+  `note` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -60,7 +60,7 @@ CREATE TABLE `damages` (
   `id` int(11) NOT NULL,
   `issue` int(11) NOT NULL,
   `room` int(11) NOT NULL,
-  `note` text NOT NULL,
+  `note` text,
   `cost` float NOT NULL,
   `resolved` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -127,7 +127,7 @@ CREATE TABLE `maintenance` (
   `workman` int(11) NOT NULL,
   `status` enum('pending','acknowledged','started','complete') NOT NULL DEFAULT 'pending',
   `lastModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `note` text NOT NULL,
+  `note` text,
   `count` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -329,7 +329,7 @@ ALTER TABLE `workmen`
 -- AUTO_INCREMENT for table `applications`
 --
 ALTER TABLE `applications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `custodians`
 --
@@ -379,7 +379,7 @@ ALTER TABLE `schedule`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `workmen`
 --
