@@ -16,7 +16,7 @@
 		<h1>School Halls of Residence</h1>
 		<h2>Submit your Application</h2>
 
-		<p>You selected the <b><?=isset($room) ? ucwords($room["name"]) : "--"?></b> room.<br>This primarily costs <b>KES <?=isset($room) ? number_format(ceil($room["rent"] / $room["capacity"]), 2) : "--"?></b> each year. If you need any special aid with the rent, please contact a custodian.</p>
+		<p>You selected the <b><?=isset($room) ? ucwords($room["name"]) : "--"?></b> room.<br>This primarily costs <b>KES <?=isset($room) ? number_format($room["rent"], 2) : "--"?></b> each year. If you need any special aid with the rent, please contact a custodian.</p>
 
 		<?php if (isset($room)) {?>
 			<h5>You're ready to submit!</h5>

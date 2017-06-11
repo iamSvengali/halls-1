@@ -26,7 +26,7 @@ if (isset($_POST["assignRoom"])){
 
 	// Update the application status
 	update($CONNECTION, "applications", ["status", "lastModified"], ["approved", date('Y-m-d H:i:s',time())], "id", $appId);
-	
+
 	// Update the room occupants
 	$occupants = query($CONNECTION, "rooms", "id", $room)[0]["occupants"];
 	$newOccupants; // new occupants string
@@ -62,7 +62,7 @@ if (isset($_POST["declineRoom"])){
 
 // Appointment started
 $appTitle; // appointment title
-$appId; // application ID
+$appId; // appointment ID
 $appType; // appointment type
 $appStudent; // hold student info
 $appRoom; // hold student room info
@@ -117,8 +117,8 @@ if (isset($_POST["apptype"])){
 	}
 
 	// Find room rent
-	$rg = query($CONNECTION, "roomgroups", "id", $appRoom["roomgroup"])[0];
-	$rent = ceil($rg["rent"] / $rg["capacity"] / 12);
+	$rg = query($CONNECTION, "roomgroups", "id", $appRoom["roomgroup"])[0]; // roomgroup
+	$rent = $rg["rent"];
 
 }
 
@@ -210,9 +210,9 @@ if (isset($_POST["report"])){
 	$rSt = []; // holds student name array
 	foreach ($rSArray as $st) { // find student names
 		$data = query($CONNECTION, "students", "id", $st)[0]; // get student data
-		array_push($rSt, $data["firstName"] . " " . $data["lastName"]); 
+		array_push($rSt, $data["firstName"] . " " . $data["lastName"]);
 	}
-	$reportStudents = implode(", ", $rSt); // create student list 
+	$reportStudents = implode(", ", $rSt); // create student list
 }
 
 // Damage report resolving
@@ -275,7 +275,7 @@ $damages = query($CONNECTION, "damages"); // get em
 if ($damages){ // if there are any damages
 	$damageList = "<table><thead><tr><th></th><th>Room</th><th>Issue</th><th></th></tr></thead><tbody>";
 	foreach ($damages as $report) {
-		$iss = query($CONNECTION, "maintenance", "id", $report["issue"])[0]; // find attached issue 
+		$iss = query($CONNECTION, "maintenance", "id", $report["issue"])[0]; // find attached issue
 		$damageList .= "<tr><td><b>#".$report["id"]."</b></td><td>".$report["room"]."</td><td>".$report["issue"]." - ".$ISSUES[$iss["problemType"]]."</td><td>";
 		if ($report["resolved"] != "1"){
 			$damageList .= "<button type='submit' name='report' value='".$report["id"]."'>View Report</button>";
